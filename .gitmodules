@@ -1,0 +1,3 @@
+[submodule "ext_fram"]
+	path = ext_fram
+	url = git@github.com:akaikang/MSP430FR5994-CY15B10X.git
