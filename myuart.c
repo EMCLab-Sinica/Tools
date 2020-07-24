@@ -130,9 +130,9 @@ void uart_putc(char c) {
 #endif
 }
 
-void print2uart(char* format,...)
+void print2uart(const char* format,...)
 {
-    char *traverse;
+    const char *traverse;
     int i;
     long l;
     unsigned long ul;
@@ -198,7 +198,7 @@ void print2uart(char* format,...)
     va_end(arg);
 }
 
-void dummyprint(char* format,...)
+void dummyprint(const char* format,...)
 {
     return;
 }
