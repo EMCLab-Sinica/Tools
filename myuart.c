@@ -296,3 +296,18 @@ void uartinit()
         uartsetup = 1;
     }
 }
+
+#ifdef __MSP432__
+// triggered when keyboard input is received in minicom
+void EUSCIA0_IRQHandler(void) {
+    // Ref: MSP432 example uart_pc_echo_12mhz_brclk
+    uint32_t status = MAP_UART_getEnabledInterruptStatus(EUSCI_A0_BASE);
+
+    MAP_UART_clearInterruptFlag(EUSCI_A0_BASE, status);
+
+    if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG)
+    {
+        MAP_UART_transmitData(EUSCI_A0_BASE, MAP_UART_receiveData(EUSCI_A0_BASE));
+    }
+}
+#endif
