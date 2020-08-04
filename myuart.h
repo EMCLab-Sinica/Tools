@@ -12,6 +12,8 @@ extern int uartsetup;
 void uartinit();
 // Serial printf
 void print2uart(const char* format,...);
+// Serial printf, improved version
+void print2uart_new(const char* format,...);
 // dummy function
 void dummyprint(const char* format,...);
 // Serial printf for debugging

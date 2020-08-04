@@ -6,6 +6,7 @@
  */
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include <Tools/myuart.h>
 #include "driverlib.h"
 #include <Tools/dvfs.h>
@@ -195,6 +196,18 @@ void print2uart(const char* format,...)
         }
     }
     //Module 3: Closing argument list to necessary clean-up
+    va_end(arg);
+}
+
+void print2uart_new(const char* format,...)
+{
+    va_list arg;
+    va_start(arg, format);
+
+    char buf[64];
+    vsnprintf(buf, 64, format, arg);
+    print2uartlength(buf, strlen(buf));
+
     va_end(arg);
 }
 
