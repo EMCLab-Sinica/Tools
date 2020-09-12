@@ -1,6 +1,6 @@
+import glob
 import platform
 import os
-import re
 import subprocess
 from subprocess import PIPE
 
@@ -22,8 +22,7 @@ def find_430_macOS():
     return msp430_uart_terminals
 
 def find_430_Linux():
-    print("Linux is not yet supported :(")
-    return []
+    return sorted(glob.glob("/dev/serial/by-id/*"))
 
 def check_minicom():
     try:
@@ -35,10 +34,13 @@ def check_minicom():
     minicom_version = minicom_version_raw.split()[2].decode()
     return minicom_version
 
-def open_minicom(device, baudrate):
-    subprocess.run(["minicom", f"--device={device}", "--baudrate", f"{baudrate}", "-m"])
+def open_minicom(device, baudrate, current_os):
+    cmd = ["minicom", f"--device={device}", "--baudrate", f"{baudrate}"]
+    if current_os == "Darwin":
+        cmd.append("-m")
+    subprocess.run(cmd)
 
-def shell(device_list: list):
+def shell(device_list: list, current_os: str):
 
     minicom_version = check_minicom()
 
@@ -50,7 +52,7 @@ def shell(device_list: list):
 
     try:
         dev_num = int(dev_num)
-    except ValueError as e:
+    except ValueError:
         print("Exit")
         exit(0)
 
@@ -60,7 +62,7 @@ def shell(device_list: list):
         print(e)
         exit(1)
 
-    open_minicom(target_dev, 9600)
+    open_minicom(target_dev, 9600, current_os)
 
 if __name__ == "__main__":
     msp430_devices = []
@@ -69,4 +71,4 @@ if __name__ == "__main__":
     elif current_os == "Linux":
         msp430_devices = find_430_Linux()
 
-    shell(msp430_devices)
+    shell(msp430_devices, current_os)
