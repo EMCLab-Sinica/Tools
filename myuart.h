@@ -18,9 +18,9 @@ void print2uart_new(const char* format,...);
 void dummyprint(const char* format,...);
 // Serial printf for debugging
 #ifdef DEBUG
-static void (*dprint2uart)(const char* format,...) = print2uart;
+#define dprint2uart print2uart
 #else
-static void (*dprint2uart)(const char* format,...) = dummyprint;
+#define dprint2uart dummyprint
 #endif
 
 //void dprint2uart(char* format,...);
