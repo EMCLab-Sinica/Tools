@@ -66,6 +66,7 @@ def shell(device_list: list, current_os: str):
 
 if __name__ == "__main__":
     msp430_devices = []
+    os.environ['LC_MESSAGES'] = 'en_US.UTF-8'
     if current_os == "Darwin": # macOS
         msp430_devices = find_430_macOS()
     elif current_os == "Linux":
