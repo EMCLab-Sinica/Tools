@@ -106,13 +106,17 @@ def shell(device_list: list, current_os: str):
     print("Found {} MSP430 UART Terminal(s)".format(len(device_list)))
     for index, device in enumerate(device_list):
         print(f"{index}\t{device}")
-    dev_num = input("Device to connect {}: ".format([n for n in range(len(device_list))]))
 
-    try:
-        dev_num = int(dev_num)
-    except ValueError:
-        print("Exit")
-        exit(0)
+    if len(device_list) > 1:
+        dev_num = input("Device to connect {}: ".format([n for n in range(len(device_list))]))
+
+        try:
+            dev_num = int(dev_num)
+        except ValueError:
+            print("Exit")
+            exit(0)
+    else:
+        dev_num = 0
 
     try:
         target_dev = device_list[dev_num]
