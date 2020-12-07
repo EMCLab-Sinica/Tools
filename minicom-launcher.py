@@ -115,8 +115,11 @@ def shell(device_list: list, current_os: str):
         except ValueError:
             print("Exit")
             exit(0)
-    else:
+    elif len(device_list) == 1:
         dev_num = 0
+    else:
+        print("No devices found")
+        exit(0)
 
     try:
         target_dev = device_list[dev_num]
