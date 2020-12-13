@@ -199,14 +199,14 @@ void print2uart(const char* format,...)
     va_end(arg);
 }
 
+static char print2uart_new_buf[64];
 void print2uart_new(const char* format,...)
 {
     va_list arg;
     va_start(arg, format);
 
-    char buf[64];
-    vsnprintf(buf, 64, format, arg);
-    print2uartlength(buf, strlen(buf));
+    vsnprintf(print2uart_new_buf, 64, format, arg);
+    print2uartlength(print2uart_new_buf, strlen(print2uart_new_buf));
 
     va_end(arg);
 }
