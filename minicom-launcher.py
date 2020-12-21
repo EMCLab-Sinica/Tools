@@ -14,7 +14,7 @@ def find_430_macOS():
     """
     DEVICE_PATH = "/dev"
     devices = os.listdir(DEVICE_PATH)
-    usb_devices = [dev for dev in devices if dev.startswith("tty.usbmodem")]
+    usb_devices = [dev for dev in devices if dev.startswith("cu.usbmodem")]
     usb_devices.sort()
     msp430_uart_terminals = [os.path.join(DEVICE_PATH, dev)
                              for dev in usb_devices if dev.endswith("03")]
