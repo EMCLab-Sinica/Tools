@@ -16,7 +16,7 @@ int uartsetup = 0;
 #ifdef __MSP430__
 // The following structure will configure the EUSCI_A port to run at 9600 baud from an 1~16MHz ACLK
 // The baud rate values were calculated at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
-EUSCI_A_UART_initParam UartParams[8] = {
+const EUSCI_A_UART_initParam UartParams[8] = {
 {//1MHz
     EUSCI_A_UART_CLOCKSOURCE_SMCLK,
     6,                                                                         // clockPrescalar
