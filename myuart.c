@@ -202,6 +202,10 @@ void print2uart(const char* format,...)
 static char print2uart_new_buf[64];
 void print2uart_new(const char* format,...)
 {
+    if (uartsetup == 0) {
+        return;
+    }
+
     va_list arg;
     va_start(arg, format);
 
