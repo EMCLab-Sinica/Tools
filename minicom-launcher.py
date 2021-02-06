@@ -98,6 +98,12 @@ def open_minicom(device, baudrate, current_os):
         cmd.append("-m")
     subprocess.run(cmd)
 
+def baudrate(target_dev):
+    if 'Cypress' in target_dev:
+        return 115200
+    else:
+        return 9600
+
 def shell(device_list: list, current_os: str):
 
     minicom_version = check_minicom()
@@ -127,7 +133,7 @@ def shell(device_list: list, current_os: str):
         print(e)
         exit(1)
 
-    open_minicom(target_dev, 9600, current_os)
+    open_minicom(target_dev, baudrate(target_dev), current_os)
 
 if __name__ == "__main__":
     msp430_devices = []
