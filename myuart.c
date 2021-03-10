@@ -14,9 +14,15 @@
 int uartsetup = 0;
 
 #ifdef __MSP430__
-// The following structure will configure the EUSCI_A port to run at 9600 baud from an 1~16MHz ACLK
+typedef EUSCI_A_UART_initParam EUSCI_CONFIG_PARAMS;
+#elif defined(__MSP432__)
+typedef eUSCI_UART_Config EUSCI_CONFIG_PARAMS;
+#endif
+
+// The following structure will configure the EUSCI_A port to run at 9600 baud from an 1~24MHz ACLK
 // The baud rate values were calculated at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
-const EUSCI_A_UART_initParam UartParams[8] = {
+// See also https://dev.ti.com/tirex/explore/node?node=ACmvnDrzuRlhbVcxPmBGTQ__z-lQYNj__LATEST for an MSP432 example
+const EUSCI_CONFIG_PARAMS UartParams[] = {
 {//1MHz
     EUSCI_A_UART_CLOCKSOURCE_SMCLK,
     6,                                                                         // clockPrescalar
@@ -97,31 +103,37 @@ const EUSCI_A_UART_initParam UartParams[8] = {
    EUSCI_A_UART_ONE_STOP_BIT,
    EUSCI_A_UART_MODE,
    EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+},{//12MHz
+   EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+   78,                                                                         // clockPrescalar
+   2,                                                                          // firstModReg
+   0,                                                                          // secondModReg
+   EUSCI_A_UART_NO_PARITY,
+   EUSCI_A_UART_LSB_FIRST,
+   EUSCI_A_UART_ONE_STOP_BIT,
+   EUSCI_A_UART_MODE,
+   EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+},{//24MHz
+   EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+   163,                                                                        // clockPrescalar
+   13,                                                                         // firstModReg
+   85,                                                                         // secondModReg
+   EUSCI_A_UART_NO_PARITY,
+   EUSCI_A_UART_LSB_FIRST,
+   EUSCI_A_UART_ONE_STOP_BIT,
+   EUSCI_A_UART_MODE,
+   EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
+},{//48MHz
+   EUSCI_A_UART_CLOCKSOURCE_SMCLK,
+   327,                                                                        // clockPrescalar
+   10,                                                                         // firstModReg
+   247,                                                                        // secondModReg
+   EUSCI_A_UART_NO_PARITY,
+   EUSCI_A_UART_LSB_FIRST,
+   EUSCI_A_UART_ONE_STOP_BIT,
+   EUSCI_A_UART_MODE,
+   EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
 }};
-
-#elif defined(__MSP432__)
-
-// https://dev.ti.com/tirex/explore/node?node=ACmvnDrzuRlhbVcxPmBGTQ__z-lQYNj__LATEST
-
-/* UART Configuration Parameter. These are the configuration parameters to
- * make the eUSCI A UART module to operate with a 9600 baud rate. These
- * values were calculated using the online calculator that TI provides
- * at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
- * Modified to fit older driverlib
- */
-const eUSCI_UART_Config UartParams[1] = {
-        EUSCI_A_UART_CLOCKSOURCE_SMCLK,          // SMCLK Clock Source
-        78,                                     // BRDIV = 78
-        2,                                       // UCxBRF = 2
-        0,                                       // UCxBRS = 0
-        EUSCI_A_UART_NO_PARITY,                  // No Parity
-        EUSCI_A_UART_LSB_FIRST,                  // LSB First
-        EUSCI_A_UART_ONE_STOP_BIT,               // One stop bit
-        EUSCI_A_UART_MODE,                       // UART mode
-        EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION,  // Oversampling
-};
-
-#endif
 
 void uart_putc(char c) {
 #ifdef __MSP430__
