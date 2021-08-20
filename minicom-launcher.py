@@ -10,6 +10,25 @@ current_os = platform.system()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('minicom-launcher')
 
+# USB IDs from Windows driver INF files under C:\ti\ccs_base\emulation\windows\xds110_drivers
+# Those drivers are installed by Emupack from https://software-dl.ti.com/ccs/esd/documents/xdsdebugprobes/emu_xds_software_package_download.html
+# Note: after installing Windows drivers, devmgmt.msc will show devices with the name specified in INF files
+XDS110_DEBUG_PORTS = [
+    # xds110_ports.inf
+    r'USB\VID_0451&PID_BEF3&MI_03',
+    r'USB\VID_0451&PID_BEF4&MI_03',
+    r'USB\VID_1CBE&PID_029E&MI_03',
+    r'USB\VID_1CBE&PID_02A5&MI_04',
+    # xds110_cmsis20.inf
+    r'USB\VID_1CBE&PID_02A5&MI_00',
+    # xds110_debug.inf
+    r'USB\VID_0451&PID_BEF3&MI_02',
+    r'USB\VID_0451&PID_BEF4&MI_02',
+    r'USB\VID_1CBE&PID_029E&MI_02',
+    r'USB\VID_1CBE&PID_029F&MI_00',
+    r'USB\VID_1CBE&PID_029F&MI_01',
+]
+
 def find_msp430_usb_interfaces():
     from ctypes import CDLL, POINTER, c_char_p, c_int32
 
@@ -55,6 +74,30 @@ def find_msp430_usb_interfaces():
 
     return interface_names
 
+def filter_xds110_debug_ports(interfaces):
+    ret = []
+    for interface in interfaces:
+        udev_info = subprocess.check_output(['udevadm', 'info', f'--name={interface}']).decode('utf-8').strip()
+        vendor_id = model_id = ifnum = None
+        for line in udev_info.split('\n'):
+            line = line.split(':')[1].strip()
+            if '=' not in line:
+                continue
+            key, value = line.split('=')
+            if key == 'ID_VENDOR_ID':
+                vendor_id = value.upper()
+            elif key == 'ID_MODEL_ID':
+                model_id = value.upper()
+            elif key == 'ID_USB_INTERFACE_NUM':
+                ifnum = value
+        full_id = f'USB\\VID_{vendor_id}&PID_{model_id}&MI_{ifnum}'
+        logger.debug('Full ID: ' + full_id)
+        if full_id in XDS110_DEBUG_PORTS:
+            logger.info(f'{interface} is detected as an XDS110 debug port ({full_id}), skipping...')
+            continue
+        ret.append(interface)
+    return ret
+
 def find_430_macOS():
     """
     Find MSP430 device path
@@ -80,7 +123,7 @@ def find_430_Linux():
                         serial_interface, serial_interface_basename)
             continue
         ret.append(serial_interface)
-    return sorted(ret)
+    return sorted(filter_xds110_debug_ports(ret))
 
 def check_minicom():
     try:
