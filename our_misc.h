@@ -17,7 +17,17 @@ inline void our_delay_cycles_internal(uint32_t n_cycles) {
                      : [n_cycles] "r"(n_cycles));
 }
 #elif defined(__MSP430__)
+# ifdef __GNUC__
+inline void our_delay_cycles_internal(uint32_t n_cycles) {
+    __asm__ volatile(".Lour_delay_cycles_loop%=:\n"
+                     "DEC %[n_cycles]\n"
+                     "JNE .Lour_delay_cycles_loop%=\n"
+                     :
+                     : [n_cycles] "r"(n_cycles));
+}
+# else
 void our_delay_cycles_internal(uint16_t n_cycles);
+#endif
 #elif defined(__linux__)
 #define our_delay_cycles_internal(n_cycles)
 #endif
