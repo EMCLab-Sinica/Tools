@@ -1,4 +1,7 @@
+#include "Tools/portable.h"
+#ifdef __TOOLS_MSP__
 #include "driverlib.h"
+#endif
 #include "Tools/dvfs.h"
 
 #ifdef __MSP430__

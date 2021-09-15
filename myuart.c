@@ -8,8 +8,22 @@
 #include <stdarg.h>
 #include <string.h>
 #include <Tools/myuart.h>
-#include "driverlib.h"
 #include <Tools/dvfs.h>
+#include <Tools/portable.h>
+
+#ifdef __TOOLS_MSP__
+#include "driverlib.h"
+#elif defined(__STM32__)
+
+#ifdef STM32L496xx
+#include "stm32l4xx_hal.h"
+#else
+#error "Please verify and add corresponding macros and headers"
+#endif
+
+#else
+#error "Please defined __MSP430__, __MSP432__ or __STM32__ according to the target board"
+#endif
 
 int uartsetup = 0;
 
@@ -19,6 +33,7 @@ typedef EUSCI_A_UART_initParam EUSCI_CONFIG_PARAMS;
 typedef eUSCI_UART_Config EUSCI_CONFIG_PARAMS;
 #endif
 
+#ifdef __TOOLS_MSP__
 // The following structure will configure the EUSCI_A port to run at 9600 baud from an 1~24MHz ACLK
 // The baud rate values were calculated at: http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSP430BaudRateConverter/index.html
 // See also https://dev.ti.com/tirex/explore/node?node=ACmvnDrzuRlhbVcxPmBGTQ__z-lQYNj__LATEST for an MSP432 example
@@ -134,6 +149,9 @@ const EUSCI_CONFIG_PARAMS UartParams[] = {
    EUSCI_A_UART_MODE,
    EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
 }};
+#elif defined(__STM32__)
+extern UART_HandleTypeDef huart2;
+#endif
 
 void uart_putc(char c) {
 #ifdef __MSP430__
@@ -235,12 +253,16 @@ void dummyprint(const char* format,...)
 
 void print2uartlength(char* str,int length)
 {
+#ifdef __TOOLS_MSP__
     int i;
 
     for(i = 0; i < length; i++)
     {
         uart_putc(*(str+i));
     }
+#elif defined(__STM32__)
+    HAL_UART_Transmit(&huart2, (uint8_t*)str, strlen(str), 0xffff);
+#endif
 }
 
 char *convert(unsigned int num, int base)
