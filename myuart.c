@@ -14,13 +14,7 @@
 #ifdef __TOOLS_MSP__
 #include "driverlib.h"
 #elif defined(__STM32__)
-
-#ifdef STM32L496xx
-#include "stm32l4xx_hal.h"
-#else
-#error "Please verify and add corresponding macros and headers"
-#endif
-
+#include STM32_HAL_HEADER
 #else
 #error "Please defined __MSP430__, __MSP432__ or __STM32__ according to the target board"
 #endif
