@@ -7,9 +7,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <Tools/myuart.h>
-#include <Tools/dvfs.h>
-#include <Tools/portable.h>
+#include "myuart.h"
+#include "dvfs.h"
+#include "portable.h"
 
 #ifdef __TOOLS_MSP__
 #include "driverlib.h"

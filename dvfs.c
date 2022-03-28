@@ -1,8 +1,8 @@
-#include "Tools/portable.h"
+#include "portable.h"
 #ifdef __TOOLS_MSP__
 #include "driverlib.h"
 #endif
-#include "Tools/dvfs.h"
+#include "dvfs.h"
 
 #ifdef __MSP430__
 unsigned int FreqLevel = 8;
