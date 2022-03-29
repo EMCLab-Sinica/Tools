@@ -4,7 +4,7 @@ import os
 import subprocess
 from subprocess import PIPE
 
-from emclab import uart_utils
+import uart_utils
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('minicom-launcher')
@@ -38,7 +38,7 @@ def run_minicom(device_list: list):
 
     minicom_version = check_minicom()
 
-    print(f"EMCLab MSP430 Minicom Connector (minicom version {minicom_version})\n")
+    print(f"MSP430 Minicom Connector (minicom version {minicom_version})\n")
     print("Found {} MSP430 UART Terminal(s)".format(len(device_list)))
     for index, device in enumerate(device_list):
         print(f"{index}\t{device}")
