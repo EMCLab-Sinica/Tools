@@ -30,7 +30,7 @@ inline void our_delay_cycles_internal(uint32_t n_cycles) {
 # else
 void our_delay_cycles_internal(uint16_t n_cycles);
 #endif
-#elif defined(__linux__)
+#else
 #define our_delay_cycles_internal(n_cycles)
 #endif
 
