@@ -2,7 +2,6 @@
  * myserial.c
  *
  *  Created on: 2017/5/25
- *      Author: Meenchen
  */
 #include <stdio.h>
 #include <stdarg.h>

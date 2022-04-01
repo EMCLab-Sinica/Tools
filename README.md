@@ -1,7 +1,7 @@
 Tools
 ===
 
-Tools to assist the development and debug of the Intermittent-OS
+Tools to assist the development and debug of applications or operation systems running on MSP430/MSP432.
 
 ---
 

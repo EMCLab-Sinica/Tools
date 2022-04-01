@@ -2,7 +2,6 @@
  * dvfs.h
  *
  *  Created on: 2016/1/26
- *      Author: WeiMingChen
  */
 
 #ifndef DVFS_H_
