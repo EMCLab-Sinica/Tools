@@ -25,6 +25,27 @@ XDS110_DEBUG_PORTS = [
     r'USB\VID_1CBE&PID_029F&MI_01',
 ]
 
+# USB IDs from Windows driver INF, extracted from CP210X_USB_Driver.zip
+# BK9171B uses CP2102. It's unlikely that we need to run minicom with it.
+# See: https://www.bkprecision.com/products/power-supplies/9171B-dual-range-dc-power-supply-10v-10a-20v-5a.html
+CP210X_PORTS = [
+    # slabvcp.inf
+    r'USB\VID_10C4&PID_EA60&MI_00',
+    r'USB\VID_10C4&PID_EA63&MI_00',
+    r'USB\VID_10C4&PID_EA70&MI_00',
+    r'USB\VID_10C4&PID_EA70&MI_01',
+    r'USB\VID_10C4&PID_EA71&MI_00',
+    r'USB\VID_10C4&PID_EA71&MI_01',
+    r'USB\VID_10C4&PID_EA71&MI_02',
+    r'USB\VID_10C4&PID_EA71&MI_03',
+    r'USB\VID_10C4&PID_EA7A&MI_00',
+    r'USB\VID_10C4&PID_EA7A&MI_01',
+    r'USB\VID_10C4&PID_EA7B&MI_00',
+    r'USB\VID_10C4&PID_EA7B&MI_01',
+    r'USB\VID_10C4&PID_EA7B&MI_02',
+    r'USB\VID_10C4&PID_EA7B&MI_03',
+]
+
 def find_msp430_usb_interfaces():
     from ctypes import CDLL, POINTER, c_char_p, c_int32
 
@@ -90,6 +111,9 @@ def filter_xds110_debug_ports(interfaces):
         logger.debug('Full ID: ' + full_id)
         if full_id in XDS110_DEBUG_PORTS:
             logger.info(f'{interface} is detected as an XDS110 debug port ({full_id}), skipping...')
+            continue
+        if full_id in CP210X_PORTS:
+            logger.info(f'{interface} is detected as a CP210X port, skipping...')
             continue
         ret.append(interface)
     return ret
