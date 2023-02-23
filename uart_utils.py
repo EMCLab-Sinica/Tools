@@ -46,12 +46,28 @@ CP210X_PORTS = [
     r'USB\VID_10C4&PID_EA7B&MI_03',
 ]
 
-def find_msp430_usb_interfaces():
-    from ctypes import CDLL, POINTER, c_char_p, c_int32
+def load_libmsp430():
+    from ctypes import CDLL
 
-    try:
-        libmsp430 = CDLL('libmsp430.so')
-    except OSError:
+    LIBRARY_NAME = 'libmsp430.so'
+    library_candidates = [LIBRARY_NAME]
+    path_candidates = [
+        f'~/ti/*/ccs/ccs_base/DebugServer/drivers/{LIBRARY_NAME}'
+    ]
+
+    for path_candidate in path_candidates:
+        library_candidates.extend(glob.glob(os.path.expanduser(path_candidate)))
+    for library_candidate in library_candidates:
+        try:
+            return CDLL(library_candidate)
+        except OSError:
+            pass
+
+def find_msp430_usb_interfaces():
+    from ctypes import POINTER, c_char_p, c_int32
+
+    libmsp430 = load_libmsp430()
+    if not libmsp430:
         logger.info('libmsp430.so is not found, skipping detection of MSP430 debugging interfaces')
         return []
 
