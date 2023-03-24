@@ -9,6 +9,11 @@ import uart_utils
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('minicom-launcher')
 
+def set_window_title(title):
+    if os.getenv('TERM') not in ('xterm-256color', 'tmux-256color'):
+        return
+    print(f'\033]2;{title}\007')
+
 def check_minicom():
     try:
         minicom_version_raw = subprocess.run(["minicom", "-v"], check=False, stdout=PIPE).stdout
@@ -20,6 +25,7 @@ def check_minicom():
     return minicom_version
 
 def open_minicom(device, baudrate):
+    set_window_title(device)
     cmd = ["minicom", f"--device={device}", "--baudrate", f"{baudrate}"]
     if platform.system() == "Darwin":
         cmd.append("-m")
