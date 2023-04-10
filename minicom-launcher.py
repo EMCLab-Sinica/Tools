@@ -35,7 +35,7 @@ def open_minicom(device, baudrate):
 
 
 def baudrate(target_dev):
-    if 'Cypress' in target_dev:
+    if 'Cypress' in target_dev or 'M432' in target_dev:
         return 115200
     else:
         return 9600

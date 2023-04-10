@@ -123,9 +123,9 @@ const EUSCI_CONFIG_PARAMS UartParams[] = {
    EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
 },{//24MHz (24000000 Hz)
    EUSCI_A_UART_CLOCKSOURCE_SMCLK,
-   156,                                                                        // clockPrescalar
-   4,                                                                          // firstModReg
-   0,                                                                          // secondModReg
+   13,                                                                         // clockPrescalar
+   0,                                                                          // firstModReg
+   37,                                                                         // secondModReg
    EUSCI_A_UART_NO_PARITY,
    EUSCI_A_UART_LSB_FIRST,
    EUSCI_A_UART_ONE_STOP_BIT,
@@ -133,9 +133,9 @@ const EUSCI_CONFIG_PARAMS UartParams[] = {
    EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION
 },{//48MHz (48000000 Hz)
    EUSCI_A_UART_CLOCKSOURCE_SMCLK,
-   312,                                                                        // clockPrescalar
-   8,                                                                          // firstModReg
-   0,                                                                         // secondModReg
+   26,                                                                         // clockPrescalar
+   0,                                                                          // firstModReg
+   111,                                                                        // secondModReg
    EUSCI_A_UART_NO_PARITY,
    EUSCI_A_UART_LSB_FIRST,
    EUSCI_A_UART_ONE_STOP_BIT,
